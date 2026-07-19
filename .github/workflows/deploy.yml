@@ -45,10 +45,12 @@ jobs:
           cp img/*.webp img/*.jpg dist/img/
           sed -i "s#</head>#<meta name=\"deployment-revision\" content=\"${GITHUB_SHA}\">\\n</head>#" dist/index.html
           test -f dist/index.html
+          (cd dist && zip -qr ../edgeone-dist.zip .)
+          unzip -Z1 edgeone-dist.zip | grep -qx index.html
       - name: Deploy to EdgeOne Makers
         run: |
           test -n "$EDGEONE_API_TOKEN" || (echo "EDGEONE_API_TOKEN is not configured" >&2 && exit 1)
-          npx --yes edgeone@1.6.14 makers deploy ./dist \
+          npx --yes edgeone@1.6.14 makers deploy ./edgeone-dist.zip \
             --name "$EDGEONE_PROJECT_NAME" \
             --token "$EDGEONE_API_TOKEN" \
             --env "$EDGEONE_DEPLOY_ENV"
