@@ -40,7 +40,9 @@ jobs:
         run: |
           mkdir dist
           cp index.html favicon.ico dist/
-          cp -R css fonts img js music dist/
+          cp -R css fonts js music dist/
+          mkdir dist/img
+          cp img/*.webp img/*.jpg dist/img/
           sed -i "s#</head>#<meta name=\"deployment-revision\" content=\"${GITHUB_SHA}\">\\n</head>#" dist/index.html
           test -f dist/index.html
       - name: Deploy to EdgeOne Makers

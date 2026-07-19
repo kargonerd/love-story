@@ -707,9 +707,9 @@ button {
     opacity: 1
 }
 #on {
-    background: url(../img/music.png)
+    background: url(../img/music.webp)
 }
 #off {
-    background: url(../img/mute.png) left center no-repeat;
+    background: url(../img/mute.webp) left center no-repeat;
     display: none
 }
