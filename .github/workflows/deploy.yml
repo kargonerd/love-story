@@ -38,16 +38,15 @@ jobs:
         run: node scripts/verify-site.mjs
       - name: Prepare deployment
         run: |
-          mkdir .edgeone-dist
-          cp index.html favicon.ico .edgeone-dist/
-          cp -R css fonts img js music .edgeone-dist/
-          sed -i "s#</head>#<meta name=\"deployment-revision\" content=\"${GITHUB_SHA}\">\\n</head>#" .edgeone-dist/index.html
-          (cd .edgeone-dist && zip -qr ../edgeone-dist.zip .)
-          unzip -Z1 edgeone-dist.zip | grep -qx index.html
+          mkdir dist
+          cp index.html favicon.ico dist/
+          cp -R css fonts img js music dist/
+          sed -i "s#</head>#<meta name=\"deployment-revision\" content=\"${GITHUB_SHA}\">\\n</head>#" dist/index.html
+          test -f dist/index.html
       - name: Deploy to EdgeOne Makers
         run: |
           test -n "$EDGEONE_API_TOKEN" || (echo "EDGEONE_API_TOKEN is not configured" >&2 && exit 1)
-          npx --yes edgeone@1.6.14 makers deploy ./edgeone-dist.zip \
+          npx --yes edgeone@1.6.14 makers deploy ./dist \
             --name "$EDGEONE_PROJECT_NAME" \
             --token "$EDGEONE_API_TOKEN" \
             --env "$EDGEONE_DEPLOY_ENV"
